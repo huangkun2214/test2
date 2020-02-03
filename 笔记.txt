@@ -1,0 +1,134 @@
+把函数作为参数传入，这样的函数称为高阶函数，函数式编程就是指这种高度抽象的编程范式。
+
+python 装饰器：
+函数被装饰后函数名func.__name__ 返回的是装饰器函数名字，解决：@functools.wraps(func)
+
+错误：RecursionError: maximum recursion depth exceeded while calling a Python object
+原因：函数递归深度超过默认1000
+解决：
+import sys   
+sys.setrecursionlimit(100000) #修改递归深度
+
+
+
+
+import functools,time
+def decorate3(func):
+	@functools.wraps(func)
+	def wrap3(*args,**kwarsg):    #这里的*args,**kwarsg指的是func（）带有参数的情况
+		t1=time.time()
+		func(*args,**kwarsg)   
+		t2=time.time()
+		print(f'time cost:{1000*(t2-t1)}')
+		return func(*args,**kwarsg)  #这里的返回func(*args,**kwarsg)是针对原函数有返回值的时候，如果没有这句，返回None 
+	return wrap3
+
+@decorate3
+def ma(s):
+	print(f'text is :{s}')
+
+ma('hah')
+
+
+
+__call__方法：实例对象后面跟（）进行触发
+
+
+
+
+
+
+偏函数：实际上，偏函数的作用，其实和原函数差不多，只不过，我们要多次调用原函数的时候，有些参数，我们需要多次手动的去提供值functools.partial
+
+
+__slots__方法的使用：绑定固定属性
+class Student(object):
+    __slots__ = ('name', 'age') # 用tuple定义允许绑定的属性名称
+
+
+
+
+
+isinstance(object, classinfo)
+如果参数object是classinfo的实例，或者object是classinfo类的子类的一个实例， 返回True。如果object不是一个给定类型的的对象， 则返回结果总是False。
+
+
+
+raise用法：抛出异常，且后面的语句不再执行
+try:
+    s = None
+    if s is None:
+        print("s shi kong de ")
+        raise NameError         # 告诉系统受到异常信号 相当于认为制造了一个异常
+    print(3333333333)           # 在raise后面的语句不再执行。
+except Exception:
+    print("8888888888888")
+
+
+
+程序调试：
+assert调试：
+assert n!=0, 'n is zero!'
+
+logging调试：
+import logging
+logging.basicConfig(level=logging.WARNING)
+s = '0'
+n = int(s)
+logging.info('n = %d' % n)
+print(10 / n)
+
+
+同源是指：同一个请求协议(如：Http或Https)、同一个Ip、同一个端口，3个全部相同，即为同源。
+
+
+__init__.py
+
+flask的基础配置：
+app=Flask(__name__)
+设置session会话
+实例化cors
+适应性配置，方便本地调试和部署线上
+数据库对象的创建和预加载,包含Redis/MongoDB等皆应在此提前实例化，如果需要从resource预先缓存数据，
+例如读取txt/csv等文件，也可以在此处预先加载，以供全局调用。
+'''
+
+with 方法后面的对象有__enter__ __exit__(exc_type,exc_value,traceback)两个方法
+
+
+用户可能会改变 URL 导致出现一个 400 请求出错页面，这样降低了用户友好度。因此， 我们推荐使用 get 或通过捕捉 KeyError 来访问 URL 参数。
+
+
+上传文件：
+<form action="" method="post" enctype="multipart/form-data">
+
+    <input type="file" name="file"/>
+
+    <input type="submit" value="上传"/>
+</form>
+
+flaks_wtf扩展：
+StringField对应HTML中type="text"的<input>元素，SubmitField对应type='submit'的<input>元素
+from wtforms.validators import Required                #引入验证函数
+# from flask_wtf import FlaskForm
+# from wtforms import StringField,PasswordField
+# from wtforms.validators import Datarequired,Length,Email,EqualTo,SubmitField
+# class Reginest(Flask):	
+# 	name=StringField('count:',validators=[Datarequired(message='input name'),Length(5,8,message='Length is in range 5-8')])
+# 	confire=PasswordField('password:',validators=[Datarequired(),])
+# 	password=PasswordField('password:',validators=[Datarequired(),EqualTo('confire',message='different from blow')])
+# 	Email=EmailField('Email',validators[Datarequired(),Email(message'')])
+# 	submit=SubmitField('submit')
+
+# 	def validate_username(self,field):
+# 		flag=User.query.filter_by(username=field.data).first()
+# 		if flag:
+# 			raise ValidationError('count is already reginested')
+# 	def validate_emial(self,field):
+# 		flag=User.query.filter_by(Email=field.date).first()
+# 		if flag:
+# 			raise ValidationError('Email is already reginested')
+
+
+在用flask-login时若想获取真正的当前用户,用current_user._get_current_object()方法.
+11111
